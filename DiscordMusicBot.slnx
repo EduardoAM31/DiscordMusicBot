@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="src/DiscordMusicBot.Bot/DiscordMusicBot.Bot.csproj" />
+  <Project Path="src/DiscordMusicBot.Core/DiscordMusicBot.Core.csproj" />
+  <Project Path="src/DiscordMusicBot.Infrastructure/DiscordMusicBot.Infrastructure.csproj" />
+  <Project Path="tests/DiscordMusicBot.Tests/DiscordMusicBot.Tests.csproj" />
+</Solution>
