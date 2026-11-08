@@ -15,24 +15,34 @@ internal class Program
             .Build();
 
         string? token = config["Discord:Token"];
+        string? guildIdValue = config["Discord:GuildId"];
 
-        if(string.IsNullOrWhiteSpace(token))
+        if (string.IsNullOrWhiteSpace(token))
         {
             throw new InvalidOperationException("Token Discord não encontrado.");
+        }
+        if (!ulong.TryParse(guildIdValue, out ulong guildId))
+        {
+            throw new InvalidOperationException("ID do servidor Discord inválido ou não encontrado.");
         }
 
         var discordBotClient = new DiscordBotClient();
         var interactionService = new InteractionService(discordBotClient.Client);
 
         await interactionService.AddModulesAsync(typeof(PingCommand).Assembly, null);
+
         discordBotClient.Client.InteractionCreated += async iteraction =>
         {
             var context = new SocketInteractionContext(discordBotClient.Client, iteraction);
             await interactionService.ExecuteCommandAsync(context, null);
         };
+        discordBotClient.Client.Ready += async () =>
+        {
+            await interactionService.RegisterCommandsToGuildAsync(guildId);
+            Console.WriteLine("Comandos registrados no servidor");
+        };
 
         await discordBotClient.ConnectAsync(token);
-
         await Task.Delay(Timeout.Infinite);
     }
 
