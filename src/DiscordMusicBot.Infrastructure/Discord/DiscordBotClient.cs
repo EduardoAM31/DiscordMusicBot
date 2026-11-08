@@ -11,9 +11,16 @@ public class DiscordBotClient
     {
         _client = new DiscordSocketClient(new DiscordSocketConfig
         {
-            GatewayIntents = GatewayIntents.Guilds | GatewayIntents.GuildVoiceStates // Define os intents do gateway para o bot, permitindo que ele receba eventos relacionados a guildas e estados de voz.
+            GatewayIntents = GatewayIntents.Guilds | GatewayIntents.GuildVoiceStates, // Define os intents do gateway para o bot, permitindo que ele receba eventos relacionados a guildas e estados de voz.
+            LogLevel = LogSeverity.Info,
+            EnableVoiceDaveEncryption = true
         });
 
+        _client.Log += log =>
+        {
+            Console.WriteLine(log.ToString());
+            return Task.CompletedTask;
+        };
         _client.Ready += OnReadyAsync;
     }
 
