@@ -21,9 +21,23 @@ public class JoinCommand : InteractionModuleBase<SocketInteractionContext>
         var guildUser = Context.Guild.GetUser(Context.User.Id);
         var voiceChannel = guildUser?.VoiceChannel;
 
-        if(voiceChannel is null)
+        if (voiceChannel is null)
         {
             await RespondAsync("Você precisa estar em um canal de voz para que eu possa entrar.");
+            return;
+        }
+
+        var botVoiceChannel = Context.Guild.CurrentUser.VoiceChannel; 
+
+        if (botVoiceChannel is not null)
+        {
+            if (botVoiceChannel.Id == voiceChannel.Id)
+            {
+                await RespondAsync("Já estou na call", ephemeral: true);
+                return;
+            }
+
+            await RespondAsync("Estou em outra call no momento", ephemeral: true);
             return;
         }
 
